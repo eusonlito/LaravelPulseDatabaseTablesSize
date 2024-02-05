@@ -21,7 +21,7 @@ return [
     'recorders' => [
 +        \EuSonLito\LaravelPulse\DatabaseTablesSize\Recorders\DatabaseTablesSizeRecorder::class => [
 +            'enabled' => env('PULSE_DATABASE_TABLES_SIZE_ENABLED', true),
-+            'schedule' => env('PULSE_DATABASE_TABLES_SIZE_SCHEDULE', 'hour'), // halfhour | hour | quarterday | halfday | day
++            'schedule' => env('PULSE_DATABASE_TABLES_SIZE_SCHEDULE', 60), // refresh time in minutes
 +            'connections' => [env('DB_CONNECTION', 'mysql')],
 +            'ignore' => [
 +                '#^/pulse$#', // Pulse dashboard...

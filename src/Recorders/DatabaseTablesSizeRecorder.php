@@ -66,21 +66,9 @@ class DatabaseTablesSizeRecorder
     protected function enabledSchedule(): bool
     {
         $timestamp = $this->pulse->values('database-tables-size', ['result'])->value('timestamp');
+        $schedule = intval($this->config('schedule'));
 
-        if (empty($timestamp)) {
-            return true;
-        }
-
-        $time = match ($this->config('schedule')) {
-            'halfhour' => strtotime('-30 minutes'),
-            'hour' => strtotime('-1 hour'),
-            'quarterday' => strtotime('-4 hours'),
-            'halfday' => strtotime('-12 hours'),
-            'day' => strtotime('-1 day'),
-            default => 0,
-        };
-
-        return $timestamp <= $time;
+        return $timestamp && $schedule && ($timestamp <= strtotime('-'.$schedule.' minutes'));
     }
 
     /**
