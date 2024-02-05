@@ -1,0 +1,29 @@
+{
+    "name": "eusonlito/laravel-pulse-database-tables-size",
+    "description": "A Laravel Pulse card to show Database Tables Size",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Lito",
+            "email": "lito@eordes.com"
+        }
+    ],
+    "require": {
+        "php": "^8.1",
+        "illuminate/support": "*",
+        "laravel/pulse": "^1.0.0@beta"
+    },
+    "autoload": {
+        "psr-4": {
+            "EuSonLito\\LaravelPulse\\DatabaseTablesSize\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "EuSonLito\\LaravelPulse\\DatabaseTablesSize\\DatabaseTablesSizeServiceProvider"
+            ]
+        }
+    }
+}
