@@ -4,7 +4,7 @@
         </x-slot:icon>
 
         <x-slot:actions>
-            <x-pulse::select wire:model.live="filter" label="Filter" :options="$connections" />
+            <x-pulse::select wire:model.live="connection" label="Connection" :options="$connections" />
         </x-slot:actions>
     </x-pulse::card-header>
 

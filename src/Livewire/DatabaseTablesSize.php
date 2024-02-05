@@ -15,7 +15,7 @@ class DatabaseTablesSize extends Card
      * @var string
      */
     #[Url(as: 'database-tables-size')]
-    public string $filter = 'mysql';
+    public string $connection = 'mysql';
 
     /**
      * @return \Illuminate\View\View
@@ -60,6 +60,6 @@ class DatabaseTablesSize extends Card
      */
     protected function sizes(array $sizes): array
     {
-        return $sizes[$this->filter] ?? array_values($sizes)[0] ?? [];
+        return $sizes[$this->connection] ?? array_values($sizes)[0] ?? [];
     }
 }
