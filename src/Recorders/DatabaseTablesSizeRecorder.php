@@ -135,9 +135,9 @@ class DatabaseTablesSizeRecorder
             'table_schema' => $connection->getDatabaseName(),
         ]);
 
-        foreach ($tables as $table) {
-            $connection->statement('ANALYZE TABLE `'.$table->table_name.'`;');
-        }
+        $connection->statement('
+            ANALYZE TABLE `'.implode('`, `', array_column($tables, 'table_name')).'`;
+        ');
 
         return $connection->select('
             SELECT
