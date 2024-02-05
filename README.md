@@ -2,6 +2,7 @@
 
 This card will show you database tables size.
 
+![Screenshot from 2024-02-05 13-43-42](https://github.com/eusonlito/LaravelPulseDatabaseTablesSize/assets/644551/21f71ca7-019a-41c4-a148-f5e28c9d86c2)
 
 ## Installation
 
