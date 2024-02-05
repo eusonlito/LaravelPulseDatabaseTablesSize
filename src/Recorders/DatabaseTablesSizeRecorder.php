@@ -38,15 +38,49 @@ class DatabaseTablesSizeRecorder
      */
     public function record(SharedBeat $event): void
     {
-        if ($this->config('enabled') === false) {
-            return;
+        if ($this->enabled()) {
+            $this->set();
+        }
+    }
+
+    /**
+     * @return bool
+     */
+    protected function enabled(): bool
+    {
+        return $this->enabledConfig()
+            && $this->enabledSchedule();
+    }
+
+    /**
+     * @return bool
+     */
+    protected function enabledConfig(): bool
+    {
+        return $this->config('enabled');
+    }
+
+    /**
+     * @return bool
+     */
+    protected function enabledSchedule(): bool
+    {
+        $timestamp = $this->pulse->values('database-tables-size', ['result'])->value('timestamp');
+
+        if (empty($timestamp)) {
+            return true;
         }
 
-        try {
-            $this->set();
-        } catch (\Exception $e) {
-            dump($e);
-        }
+        $time = match ($this->config('schedule')) {
+            'halfhour' => strtotime('-30 minutes'),
+            'hour' => strtotime('-1 hour'),
+            'quarterday' => strtotime('-4 hours'),
+            'halfday' => strtotime('-12 hours'),
+            'day' => strtotime('-1 day'),
+            default => 0,
+        };
+
+        return $timestamp <= $time;
     }
 
     /**
@@ -93,6 +127,18 @@ class DatabaseTablesSizeRecorder
      */
     protected function resultMysql(Connection $connection): array
     {
+        $tables = $connection->select('
+            SELECT `table_name` AS `table_name`
+            FROM `information_schema`.`tables`
+            WHERE `table_schema` = :table_schema;
+        ', [
+            'table_schema' => $connection->getDatabaseName(),
+        ]);
+
+        foreach ($tables as $table) {
+            $connection->statement('ANALYZE TABLE `'.$table->table_name.'`;');
+        }
+
         return $connection->select('
             SELECT
                 `table_name` AS `table_name`,
